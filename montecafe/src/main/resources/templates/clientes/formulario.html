@@ -1,35 +1,50 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Formulario Cliente</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Formulario de Cliente - Montecafe</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 400px; }
+        div { margin-bottom: 10px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 8px; }
+        .error { color: red; font-size: 0.9em; }
+        button { padding: 10px 15px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        a.button { display: inline-block; padding: 8px 12px; margin-top: 10px; background: #6c757d; color: #fff; text-decoration: none; border-radius: 4px; }
+    </style>
 </head>
 <body>
-<h1 th:text="${cliente.id != null} ? 'Editar Cliente' : 'Nuevo Cliente'"></h1>
+<h1>Formulario de Cliente</h1>
+<form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+    <input type="hidden" th:field="*{id}" />
 
-<form th:action="@{/clientes}" th:object="${cliente}" method="post">
-    <input type="hidden" th:field="*{id}">
+    <div>
+        <label>Nombre:</label>
+        <input type="text" th:field="*{nombre}" />
+        <span class="error" th:errors="*{nombre}"></span>
+    </div>
 
-    <label>Nombre:</label>
-    <input type="text" th:field="*{nombre}" required>
-    <br>
+    <div>
+        <label>Correo:</label>
+        <input type="email" th:field="*{correo}" />
+        <span class="error" th:errors="*{correo}"></span>
+    </div>
 
-    <label>Email:</label>
-    <input type="email" th:field="*{email}">
-    <br>
+    <div>
+        <label>Teléfono:</label>
+        <input type="text" th:field="*{telefono}" />
+        <span class="error" th:errors="*{telefono}"></span>
+    </div>
 
-    <label>Teléfono:</label>
-    <input type="text" th:field="*{telefono}">
-    <br>
-
-    <label>Dirección:</label>
-    <input type="text" th:field="*{direccion}">
-    <br><br>
+    <div>
+        <label>Dirección:</label>
+        <input type="text" th:field="*{direccion}" />
+        <span class="error" th:errors="*{direccion}"></span>
+    </div>
 
     <button type="submit">Guardar</button>
-    <a th:href="@{/clientes}">Cancelar</a>
 </form>
 </body>
 </html>

@@ -1,48 +1,53 @@
 package com.montecafe.montecafe.cliente.controller;
 
 import com.montecafe.montecafe.cliente.model.cliente;
-import com.montecafe.montecafe.cliente.service.clienteService;
+import com.montecafe.montecafe.cliente.repository.clienteRepository;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/clientes")
 public class clienteController {
 
-    private final clienteService clienteService;
-
-    public clienteController(clienteService clienteService) {
-        this.clienteService = clienteService;
-    }
+    @Autowired
+    private clienteRepository clienteRepository;
 
     @GetMapping
-    public String listarClientes(Model model) {
-        model.addAttribute("clientes", clienteService.listarTodos());
-        return "clientes/lista"; // Vista Thymeleaf (se creará luego)
+    public String listar(Model model) {
+        model.addAttribute("clientes", clienteRepository.findAll());
+        return "clientes/lista";
     }
 
     @GetMapping("/nuevo")
-    public String mostrarFormulario(Model model) {
+    public String nuevoCliente(Model model) {
         model.addAttribute("cliente", new cliente());
         return "clientes/formulario";
     }
 
-    @PostMapping
-    public String guardarCliente(@ModelAttribute cliente cliente) {
-        clienteService.guardar(cliente);
+    @PostMapping("/guardar")
+    public String guardar(@Valid @ModelAttribute("cliente") cliente cliente, BindingResult result) {
+        if (result.hasErrors()) {
+            return "clientes/formulario";
+        }
+        clienteRepository.save(cliente); // save() actualiza si el ID existe
         return "redirect:/clientes";
     }
 
     @GetMapping("/editar/{id}")
-    public String editarCliente(@PathVariable Long id, Model model) {
-        model.addAttribute("cliente", clienteService.obtenerPorId(id));
+    public String editar(@PathVariable Long id, Model model) {
+        cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado: " + id));
+        model.addAttribute("cliente", cliente);
         return "clientes/formulario";
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarCliente(@PathVariable Long id) {
-        clienteService.eliminar(id);
+    public String eliminar(@PathVariable Long id) {
+        clienteRepository.deleteById(id);
         return "redirect:/clientes";
     }
 }

@@ -1,41 +1,39 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Clientes</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        a.button { padding: 6px 10px; margin: 2px; background: #007bff; color: #fff; text-decoration: none; border-radius: 4px; }
+        a.button.red { background: #dc3545; }
+    </style>
 </head>
 <body>
 <h1>Lista de Clientes</h1>
-
-<a th:href="@{/clientes/nuevo}">Agregar Nuevo Cliente</a>
-<br><br>
-
-<table border="1">
+<a class="button" th:href="@{/clientes/nuevo}">Agregar Nuevo Cliente</a>
+<table>
     <thead>
     <tr>
-        <th>ID</th>
         <th>Nombre</th>
-        <th>Email</th>
+        <th>Correo</th>
         <th>Teléfono</th>
         <th>Dirección</th>
-        <th>Fecha Registro</th>
         <th>Acciones</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="cliente : ${clientes}">
-        <td th:text="${cliente.id}"></td>
-        <td th:text="${cliente.nombre}"></td>
-        <td th:text="${cliente.email}"></td>
-        <td th:text="${cliente.telefono}"></td>
-        <td th:text="${cliente.direccion}"></td>
-        <td th:text="${cliente.fechaRegistro}"></td>
+    <tr th:each="c : ${clientes}">
+        <td th:text="${c.nombre}"></td>
+        <td th:text="${c.correo}"></td>
+        <td th:text="${c.telefono}"></td>
+        <td th:text="${c.direccion}"></td>
         <td>
-            <a th:href="@{'/clientes/editar/' + ${cliente.id}}">Editar</a> |
-            <a th:href="@{'/clientes/eliminar/' + ${cliente.id}}"
-               onclick="return confirm('¿Estás seguro de eliminar este cliente?')">Eliminar</a>
+            <a th:href="@{'/clientes/editar/' + ${c.id}}">Editar</a>
+            <a th:href="@{'/clientes/eliminar/' + ${c.id}}">Eliminar</a>
         </td>
     </tr>
     </tbody>
