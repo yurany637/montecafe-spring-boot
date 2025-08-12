@@ -1,36 +1,34 @@
-# Montecafe - Proyecto Web (Spring Boot + Thymeleaf)
-
-## Autor
-- **Nombre:** Dirley Yurany Córdoba Díaz  
-- **Evidencia:** GA7-220501096-AA3-EV01 codificación de módulos del software Stand alone, web y móvil de acuerdo al proyecto a desarrollar.  
-- **Programa:** Tecnólogo en Análisis y Desarrollo de Software – SENA.  
-- Ficha 2977429
+# API de Gestión para el Proyecto Monte Café (Evidencia GA7-220501096-AA5-EV03)
 
 ## Descripción
-Este proyecto forma parte de la evidencia **GA7-220501096-AA3-EV01**, en la cual se desarrolla el módulo de **Clientes** del sistema **Montecafe**, utilizando **Spring Boot**, **Thymeleaf** y **MySQL**.  
-El objetivo es demostrar la codificación de módulos web aplicando un framework de Java, cumpliendo con los estándares de codificación y versionamiento con GitHub.
+Este proyecto es una API REST (servicios web) construida en **Java con Spring Boot** para el proyecto formativo "Monte Café". El objetivo de esta fase es diseñar y desarrollar las funcionalidades básicas para los siguientes módulos:
 
----
+-   **Clientes**: Gestión de la información de los clientes (crear, leer, actualizar, eliminar).
+-   **Inventario**: Control de la cantidad de productos disponibles.
+-   **Usuarios con Roles**: Registro y gestión de usuarios, con asignación de roles (ej. `ADMIN`, `CLIENTE`).
+-   **Proveedores**: Gestión de la información de los proveedores.
+-   **Ventas**: Registro de ventas y cálculo del valor total.
 
-## Características
-- **CRUD de Clientes**: Registrar, listar, actualizar y eliminar clientes.  
-- **Tecnologías utilizadas**:  
-  - **Java 17+**  
-  - **Spring Boot 3.x**  
-  - **Spring Data JPA**  
-  - **Thymeleaf** (para vistas HTML)  
-  - **MySQL** (para persistencia de datos)  
-  - **Maven** (gestión de dependencias)  
-  - **Git/GitHub** (control de versiones).
+## Tecnologías Utilizadas
+* **Lenguaje**: Java 17+
+* **Framework**: Spring Boot 3.5.4
+* **Gestor de Dependencias**: Maven
+* **Base de Datos**: MySQL
+* **ORM**: JPA / Hibernate
+* **Control de Versiones**: Git & GitHub
 
----
+## Endpoints (Rutas de la API)
+La API expone múltiples rutas (endpoints) para interactuar con los datos. A continuación, se listan las rutas principales diseñadas y codificadas en este proyecto:
 
-## Requisitos Previos
-- Tener instalado **Java 17+** y configurado en el PATH.  
-- Tener instalado **MySQL 8+** y corriendo el servicio.  
-- Tener instalado **Maven** (incluido en IntelliJ IDEA o STS).  
-- Tener **Git** instalado para versionamiento.
+* **Clientes**: `/api/clientes` (GET, POST, PUT, DELETE)
+* **Inventario**: `/api/inventario` (GET)
+* **Usuarios**: `/api/usuarios` (POST, GET)
+* **Proveedores**: `/api/proveedores` (GET, POST)
+* **Ventas**: `/api/ventas` (POST, GET)
 
----
-Repositorio GitHub https://github.com/yurany637/montecafe-spring-boot.git 
+## Documentación de Código
+Cada método en los controladores de la API (`ClienteController`, `VentaController`, etc.) incluye comentarios detallados sobre su función, los parámetros que recibe y el tipo de respuesta que devuelve.
 
+---Autor: Dirley Yurany Córdoba Díaz
+   Programa: Análisis y desarrollo de Software-
+   Ficha 2977429
