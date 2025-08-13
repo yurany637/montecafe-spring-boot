@@ -4,50 +4,56 @@ import com.montecafe.montecafe.cliente.model.cliente;
 import com.montecafe.montecafe.cliente.repository.clienteRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/clientes")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/clientes")
 public class clienteController {
 
     @Autowired
     private clienteRepository clienteRepository;
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("clientes", clienteRepository.findAll());
-        return "clientes/lista";
+    public List<cliente> listar() {
+        return clienteRepository.findAll();
     }
 
-    @GetMapping("/nuevo")
-    public String nuevoCliente(Model model) {
-        model.addAttribute("cliente", new cliente());
-        return "clientes/formulario";
+    @GetMapping("/{id}")
+    public ResponseEntity<cliente> obtenerPorId(@PathVariable Long id) {
+        return clienteRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/guardar")
-    public String guardar(@Valid @ModelAttribute("cliente") cliente cliente, BindingResult result) {
-        if (result.hasErrors()) {
-            return "clientes/formulario";
+    @PostMapping
+    public cliente guardar(@RequestBody cliente cliente) {
+        return clienteRepository.save(cliente);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<cliente> actualizar(@PathVariable Long id, @RequestBody cliente detalles) {
+        return clienteRepository.findById(id)
+                .map(cliente -> {
+                    cliente.setNombre(detalles.getNombre());
+                    cliente.setDireccion(detalles.getDireccion()); // <-- CAMBIO AQUÍ
+                    cliente.setcorreo(detalles.getcorreo());
+                    cliente.setTelefono(detalles.getTelefono());
+                    cliente updated = clienteRepository.save(cliente);
+                    return ResponseEntity.ok(updated);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (clienteRepository.existsById(id)) {
+            clienteRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        clienteRepository.save(cliente); // save() actualiza si el ID existe
-        return "redirect:/clientes";
-    }
-
-    @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model) {
-        cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado: " + id));
-        model.addAttribute("cliente", cliente);
-        return "clientes/formulario";
-    }
-
-    @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
-        clienteRepository.deleteById(id);
-        return "redirect:/clientes";
     }
 }
